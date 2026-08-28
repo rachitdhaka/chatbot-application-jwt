@@ -3,8 +3,10 @@
 import { useState } from "react";
 import axios from "axios";
 import Container from "./components/Container";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [question, setQuestion] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -13,11 +15,25 @@ export default function Home() {
     e.preventDefault();
     if (!question.trim()) return;
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/loginpage");
+      return;
+    }
+
     setIsLoading(true);
     setAnswer("");
 
     try {
-      const res = await axios.post("http://localhost:4000/ask", { question });
+      const res = await axios.post(
+        "http://localhost:4000/ask",
+        { question },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setAnswer(res.data.reply);
     } catch (error) {
       console.error("Backend error:", error);
@@ -28,6 +44,8 @@ export default function Home() {
   };
 
   return (
+
+    
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 p-4">
       <Container classname="w-full w-5xl rounded-2xl border border-neutral-200 bg-white p-6 shadow-md flex flex-col max-h-[85vh]">
         
@@ -82,6 +100,8 @@ export default function Home() {
         )}
 
       </Container>
+
+      
     </div>
   );
 }
