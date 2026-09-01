@@ -179,16 +179,29 @@ export default function Home() {
     router.push("/loginpage");
   };
 
+  const hasToken =
+    typeof window !== "undefined" && !!localStorage.getItem("token");
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-stone-100 p-4 text-neutral-800">
       <div className="mb-3 w-full max-w-4xl flex justify-end">
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 cursor-pointer"
-        >
-          Logout
-        </button>
+        {hasToken ? (
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 cursor-pointer"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => router.push("/loginpage")}
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 cursor-pointer"
+          >
+            Login
+          </button>
+        )}
       </div>
       <Container classname="w-full max-w-4xl flex flex-col rounded-2xl border border-neutral-200 bg-white shadow-sm max-h-[88vh]">
         <header className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
