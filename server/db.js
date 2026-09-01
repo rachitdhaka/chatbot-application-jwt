@@ -9,26 +9,51 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    
     passwordHash: {
       type: String,
     },
-    // Track how the user signed up
     authProvider: {
       type: String,
       enum: ["local", "github"],
       default: "local",
     },
-    // Optional: Store their GitHub unique ID for safer lookups
     githubId: {
       type: String,
       unique: true,
-      sparse: true, // Allows multiple users to have 'null' githubId (for local users)
+      sparse: true,
     },
   },
   { timestamps: true },
 );
 
-const User = mongoose.model("User", userSchema);
+const messageSchema = new mongoose.Schema(
+  {
+    role: {
+      type: String,
+      enum: ["user", "assistant"],
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
+
+const chatSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    messages: [messageSchema],
+  },
+  { timestamps: true },
+);
+
+export const User = mongoose.model("User", userSchema);
+export const Chat = mongoose.model("Chat", chatSchema);
 
 export default User;
