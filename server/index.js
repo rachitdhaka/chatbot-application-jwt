@@ -184,6 +184,12 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+
+
+
+
+
+
 app.get("/api/auth/github/callback", async (req, res) => {
   const { code } = req.query;
 
@@ -251,6 +257,16 @@ app.get("/api/auth/github/callback", async (req, res) => {
     res.status(500).json({ error: "Authentication pipeline failed" });
   }
 });
+
+
+
+
+
+
+
+
+
+
 
 const main = async () => {
   const mongoUri = process.env.MONGO_URI;

@@ -12,7 +12,12 @@ export default function Page() {
   const router = useRouter();
 
   const GITHUB_CLIENT_ID = "Ov23liA3hhVHMs2rEZRr";
-  const githubAuthUrl = `https://github.com{GITHUB_CLIENT_ID}&scope=user:email`;
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    "http://localhost:4000/api/auth/github/callback",
+  )}&scope=user:email`;
+
+
+  
   const callforlogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMsg("");
